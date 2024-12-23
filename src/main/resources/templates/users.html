@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+        }
+        .sidebar a.active, .sidebar a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+        .navbar-custom {
+            background-color: #007bff;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .navbar-custom .navbar-nav .nav-link:hover {
+            color: #ddd;
+        }
+        .search-bar {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .table img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .search-bar input {
+            width: 300px;
+        }
+        /* Pagination styles */
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <a class="navbar-brand" href="#">Users Management</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/rooms">Room List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reservations">Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/users}">Users</a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">
+                    <img src="/path-to-admin-avatar.jpg" alt="Admin" class="rounded-circle" style="width: 40px; height: 40px;">
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="content">
+    <!-- Room List Title -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Users List</h1>
+        <a href="/users/create" class="btn btn-success mt-3"> + Add New User</a>
+    </div>
+
+    <form th:action="@{/users/search}" method="get" class="form-inline mb-4">
+        <input type="text" name="query" class="form-control mr-2" placeholder="Search by name or type" required>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <!-- Table to display users -->
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through the users list -->
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.name}">John Doe</td>
+            <td th:text="${user.email}">johndoe@example.com</td>
+            <td th:text="${user.role}">Admin</td>
+            <td>
+                <!-- Edit button -->
+                <a th:href="@{/users/{id}/edit(id=${user.id})}" class="btn btn-primary btn-sm">Edit</a>
+
+                <!-- Delete button with confirmation -->
+                <a th:href="@{/users/{id}/delete(id=${user.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Optionally add footer or other elements -->
+
+<!-- Bootstrap JS for modal and other functionality -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

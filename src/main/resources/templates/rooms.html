@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Room List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+        }
+        .sidebar a.active, .sidebar a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+        .navbar-custom {
+            background-color: #007bff;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .navbar-custom .navbar-nav .nav-link:hover {
+            color: #ddd;
+        }
+        .search-bar {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .table img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .search-bar input {
+            width: 300px;
+        }
+        /* Pagination styles */
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <a class="navbar-brand" href="#">Room Management</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/rooms">Room List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/reservations}">Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/users}">Users</a>
+
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">
+                    <img src="/path-to-admin-avatar.jpg" alt="Admin" class="rounded-circle" style="width: 40px; height: 40px;">
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Contenu principal -->
+<div class="content">
+    <!-- Room List Title -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Room List</h1>
+        <a href="/rooms/add-room" class="btn btn-success mt-3"> + Add New Room</a>
+    </div>
+
+    <!-- Barre de recherche -->
+    <form th:action="@{/rooms/search}" method="get" class="form-inline mb-4">
+        <input type="text" name="query" class="form-control mr-2" placeholder="Search by name or type" required>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Tableau des chambres -->
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="room : ${rooms}">
+            <td>
+                <img th:src="${room.imageUrl}" alt="Room Image">
+            </td>
+            <td th:text="${room.name}">Room Name</td>
+            <td th:text="${room.type}">Room Type</td>
+            <td th:text="${room.capacity}">Room Capacity</td>
+            <td>
+                <span th:if="${room.available}" class="badge badge-success">Available</span>
+                <span th:if="${!room.available}" class="badge badge-danger">Not Available</span>
+            </td>
+            <td th:text="${room.description}">Room Description</td>
+            <td>
+                <a th:href="@{'/rooms/edit/' + ${room.id}}" class="btn btn-primary btn-sm">Edit</a>
+                <a th:href="@{'/rooms/delete/' + ${room.id}}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">Delete</a>
+
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination justify-content-center mt-4">
+        <ul class="pagination">
+            <!-- Lien vers la page précédente -->
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/rooms(page=${currentPage - 1}, size=${10})}" tabindex="-1">Previous</a>
+            </li>
+
+            <!-- Boucle pour les pages -->
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/rooms(page=${i}, size=${10})}" th:text="${i + 1}">1</a>
+            </li>
+
+            <!-- Lien vers la page suivante -->
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/rooms(page=${currentPage + 1}, size=${10})}">Next</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Scripts nécessaires pour Bootstrap (facultatif, si nécessaire pour certains éléments comme le menu déroulant) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

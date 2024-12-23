@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier une réservation</title>
+</head>
+<body>
+<h2>Modifier une réservation</h2>
+
+<form th:action="@{/reservations/edit/{id}(id=${reservation.id})}" th:object="${reservation}" method="post">
+    <div>
+        <label for="guestName">Nom de l'invité:</label>
+        <input type="text" id="guestName" th:field="*{guestName}" required/>
+    </div>
+    <div>
+        <label for="guestEmail">Email de l'invité:</label>
+        <input type="email" id="guestEmail" th:field="*{guestEmail}" required/>
+    </div>
+    <div>
+        <label for="startDate">Date de début:</label>
+        <input type="date" id="startDate" th:field="*{startDate}" required/>
+    </div>
+    <div>
+        <label for="endDate">Date de fin:</label>
+        <input type="date" id="endDate" th:field="*{endDate}" required/>
+    </div>
+    <div>
+        <label for="clientName">Nom du client:</label>
+        <input type="text" id="clientName" th:field="*{clientName}" required/>
+    </div>
+    <div>
+        <label for="status">Statut:</label>
+        <select id="status" th:field="*{status}" required>
+            <option value="CONFIRMED" th:selected="${reservation.status == 'CONFIRMED'}">Confirmée</option>
+            <option value="PENDING" th:selected="${reservation.status == 'PENDING'}">En attente</option>
+            <option value="CANCELLED" th:selected="${reservation.status == 'CANCELLED'}">Annulée</option>
+        </select>
+    </div>
+    <div>
+        <label for="room">Chambre:</label>
+        <select id="room" th:field="*{room}" required>
+            <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.name}" th:selected="${room.id == reservation.room.id}"></option>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">Modifier Réservation</button>
+    </div>
+</form>
+
+</body>
+</html>

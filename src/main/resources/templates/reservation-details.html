@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+        .navbar-custom {
+            background-color: #007bff;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .navbar-custom .navbar-nav .nav-link:hover {
+            color: #ddd;
+        }
+        .reservation-details {
+            margin-top: 30px;
+        }
+        .reservation-details .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <a class="navbar-brand" href="#">Room Management</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/rooms">Room List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reservations">Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">Profile</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main content -->
+<div class="content">
+    <h1>Reservation Details</h1>
+
+    <div class="reservation-details">
+        <!-- Reservation Info -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Reservation Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Reservation ID:</strong> <span th:text="${reservation.id}"></span></p>
+                <p><strong>Room:</strong> <span th:text="${reservation.room.name}"></span></p>
+                <p><strong>Customer:</strong> <span th:text="${reservation.customer.name}"></span></p>
+                <p><strong>Check-in Date:</strong> <span th:text="${reservation.checkInDate}"></span></p>
+                <p><strong>Check-out Date:</strong> <span th:text="${reservation.checkOutDate}"></span></p>
+                <p><strong>Status:</strong> <span th:text="${reservation.status}"></span></p>
+            </div>
+        </div>
+
+        <!-- Payment Info -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Payment Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Amount Paid:</strong> <span th:text="${reservation.amountPaid}">$500</span></p>
+                <p><strong>Payment Status:</strong> <span th:text="${reservation.paymentStatus}">Paid</span></p>
+                <p><strong>Payment Method:</strong> <span th:text="${reservation.paymentMethod}">Credit Card</span></p>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card">
+            <div class="card-body text-center">
+                <a href="/reservations/edit/{reservation.id}" class="btn btn-primary">Edit Reservation</a>
+                <a href="/reservations/cancel/{reservation.id}" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this reservation?')">Cancel Reservation</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

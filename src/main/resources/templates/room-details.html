@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Salle</title>
+</head>
+<body>
+
+<h1>Détails de la Salle</h1>
+
+<div>
+    <h2 th:text="${room.name}"></h2>
+    <img th:src="@{${room.imageUrl != null ? room.imageUrl : '/images/placeholder.jpg'}}" alt="Image de la salle">
+    <p>Capacité : <span th:text="${room.capacity}"></span> personnes</p>
+    <p>Description : <span th:text="${room.description}"></span></p>
+    <p th:text="${room.available ? 'Disponible' : 'Indisponible'}"></p>
+</div>
+
+<div>
+    <a href="/rooms">Retour à la liste des salles</a>
+</div>
+
+</body>
+</html>
